@@ -1,0 +1,42 @@
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+#      circuitbreakers:
+#        enabled: true
+resilience4j:
+  ratelimiter:
+    instances:
+      orderService:
+        timeoutDuration: 10s
+        limitRefreshPeriod: 4s
+        event-consumer-buffer-size: 100
+        limitForPeriod: 1
+        register-health-indicator: 'true'
+  circuitbreaker:
+    instances:
+      orderServiceCircuitBreaker:
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 10
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowSize: 10
+        waitDurationInOpenState: 5s
+        slidingWindowType: COUNT_BASED
+  retry:
+    instances:
+      orderServiceRetry:
+        maxRetryAttempts: 3
+        waitDuration: 10000
+
+server:
+  port: '8082'
