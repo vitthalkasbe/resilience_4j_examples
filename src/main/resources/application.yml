@@ -37,6 +37,17 @@ resilience4j:
       orderServiceRetry:
         maxRetryAttempts: 3
         waitDuration: 10000
+  bulkhead:
+    instances:
+      orderServiceBulkheadSemaphore:
+        maxWaitDuration: 3000
+        maxConcurrentCalls: 5
+  thread-pool-bulkhead:
+    instances:
+      orderServiceBulkheadFixedThreadPool:
+        maxThreadPoolSize: 2
+        coreThreadPoolSize: 1
+        queueCapacity: 1
 
 server:
   port: '8082'
